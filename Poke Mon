@@ -1,0 +1,29 @@
+package com.company;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int pokePowerN = Integer.parseInt(scanner.nextLine());
+        double originalPokePower = pokePowerN;
+        int distanceM = Integer.parseInt(scanner.nextLine());
+        int exhaustionFactorY = Integer.parseInt(scanner.nextLine());
+
+        int pokedTargets = 0;
+        while (pokePowerN >= distanceM) {
+
+            pokedTargets++;
+            pokePowerN -= distanceM;
+
+            if (originalPokePower / 2 == pokePowerN && exhaustionFactorY != 0) {
+                pokePowerN = pokePowerN / exhaustionFactorY;
+            }
+        }
+
+        System.out.println(pokePowerN);
+        System.out.println(pokedTargets);
+    }
+}
