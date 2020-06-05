@@ -1,0 +1,35 @@
+package com.company;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] arrayOfNumbers = Arrays.stream(scanner.nextLine().split(" "))
+                .mapToInt(Integer::parseInt).toArray();
+
+
+        String topInteger = "";
+
+
+        for (int i = 0; i < arrayOfNumbers.length; i++) {
+            int currentNum = arrayOfNumbers[i];
+            boolean isTopInteger = true;
+            for (int j = i + 1; j <= arrayOfNumbers.length - 1; j++) {
+                if (currentNum <= arrayOfNumbers[j]) {
+                    isTopInteger = false;
+                    break;
+                }
+            }
+
+            if (isTopInteger){
+                topInteger += String.valueOf(currentNum) + " ";
+            }
+        }
+
+        System.out.println(topInteger);
+    }
+}
