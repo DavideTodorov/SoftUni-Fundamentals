@@ -1,0 +1,34 @@
+package com.company;
+
+import javax.print.DocFlavor;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        long countOfSnowballs = Integer.parseInt(scanner.nextLine());
+
+        long bestSnowball = Integer.MIN_VALUE;
+        long bestSnow = 0;
+        long bestTime = 0;
+        long bestQuality = 0;
+
+        for (int i = 0; i < countOfSnowballs; i++) {
+            long snowballSnow = Long.parseLong(scanner.nextLine());
+            long snowballTime = Long.parseLong(scanner.nextLine());
+            long snowballQuality = Long.parseLong(scanner.nextLine());
+
+            long snowballValue = (long)Math.pow((snowballSnow / snowballTime), snowballQuality);
+            if (bestSnowball < snowballValue) {
+                bestSnowball = snowballValue;
+                bestSnow = snowballSnow;
+                bestTime = snowballTime;
+                bestQuality = snowballQuality;
+            }
+        }
+
+        System.out.printf("%d : %d = %d (%d)", bestSnow, bestTime, bestSnowball, bestQuality);
+    }
+}
