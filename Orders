@@ -1,0 +1,49 @@
+package com.company;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String productName = scanner.nextLine();
+        int productQuantity = Integer.parseInt(scanner.nextLine());
+
+        double totalPrice = 0;
+        switch (productName) {
+            case "coffee":
+                totalPrice = calculateCoffeePrice(productQuantity);
+                break;
+            case "water":
+                totalPrice = calculateWaterPrice(productQuantity);
+                break;
+            case "coke":
+                totalPrice = calculateCokePrice(productQuantity);
+                break;
+            case "snacks":
+                totalPrice = calculateSnacksPrice(productQuantity);
+                break;
+
+        }
+
+        System.out.printf("%.2f", totalPrice);
+    }
+
+    private static double calculateCoffeePrice(int productQuantity) {
+        return productQuantity * 1.5;
+    }
+
+    private static double calculateWaterPrice(int productQuantity) {
+        return productQuantity;
+    }
+
+    private static double calculateCokePrice(int productQuantity) {
+        return productQuantity * 1.4;
+    }
+
+    private static double calculateSnacksPrice(int productQuantity) {
+        return productQuantity * 2;
+    }
+}
