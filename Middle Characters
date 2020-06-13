@@ -1,0 +1,31 @@
+package com.company;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        String midChar = getMiddleChar(input);
+
+        System.out.println(midChar);
+    }
+
+    private static String getMiddleChar(String input) {
+        String middleChar = "";
+
+        if (input.length() % 2 == 0){
+            int charIndex = (input.length() - 2) / 2;
+            middleChar = middleChar + input.charAt(charIndex) + input.charAt(charIndex + 1);
+        }else {
+            int charIndex = (input.length() - 1) / 2;
+            middleChar += input.charAt(charIndex);
+        }
+
+        return middleChar;
+    }
+}
