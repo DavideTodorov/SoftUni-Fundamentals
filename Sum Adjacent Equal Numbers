@@ -1,0 +1,40 @@
+package com.company;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Double> numbers = new ArrayList<>();
+        String[] input = scanner.nextLine().split(" ");
+        for (String s : input) {
+            double num = Double.parseDouble(s);
+            numbers.add(num);
+        }
+
+
+        for (int i = 0; i < numbers.size() - 1; i++) {
+            double sum = 0;
+
+            if (numbers.get(i).equals(numbers.get(i + 1))) {
+                sum = numbers.get(i) + numbers.get(i + 1);
+                numbers.set(i, sum);
+                numbers.remove(i + 1);
+                i = -1;
+            }
+        }
+
+        for (Double number : numbers) {
+            DecimalFormat format = new DecimalFormat("#.#");
+
+
+            System.out.print(format.format(number) + " ");
+        }
+
+    }
+}
