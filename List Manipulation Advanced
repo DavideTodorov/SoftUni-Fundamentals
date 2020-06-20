@@ -1,0 +1,138 @@
+package com.company;
+
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Integer> numbers = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+
+
+        String[] command = scanner.nextLine().split(" ");
+        while (!"end".equals(command[0])) {
+            switch (command[0]) {
+
+                case "Contains": {
+                    int number = Integer.parseInt(command[1]);
+                    containNumber(numbers, number);
+                }
+                case "Print": {
+                    if (command[1].equals("even")) {
+                        printEven(numbers);
+                    } else if (command[1].equals("odd")) {
+                        printOdd(numbers);
+                    }
+                    break;
+                }
+                case "Get": {
+                    int sum = 0;
+                    for (int i = 0; i < numbers.size(); i++) {
+                        int curr = numbers.get(i);
+                        sum += curr;
+                    }
+                    System.out.println(sum);
+                    break;
+                }
+                case "Filter": {
+                    List<Integer> filtered = new ArrayList<>();
+                    String condition = command[1];
+                    int num = Integer.parseInt(command[2]);
+
+                    if (condition.equals(">")) {
+                        for (int i = 0; i < numbers.size(); i++) {
+                            int curr = numbers.get(i);
+
+                            if (curr > num) {
+                                filtered.add(curr);
+                            }
+                        }
+                    } else if (condition.equals("<")) {
+                        for (int i = 0; i < numbers.size(); i++) {
+                            int curr = numbers.get(i);
+
+                            if (curr < num) {
+                                filtered.add(curr);
+                            }
+                        }
+                    } else if (condition.equals(">=")) {
+                        for (int i = 0; i < numbers.size(); i++) {
+                            int curr = numbers.get(i);
+
+                            if (curr >= num) {
+                                filtered.add(curr);
+                            }
+                        }
+                    } else if (condition.equals("<=")) {
+                        for (int i = 0; i < numbers.size(); i++) {
+                            int curr = numbers.get(i);
+
+                            if (curr <= num) {
+                                filtered.add(curr);
+                            }
+                        }
+                    }
+
+                    for (Integer integer : filtered) {
+                        System.out.print(integer + " ");
+                    }
+                    System.out.println();
+                    break;
+                }
+            }
+
+            command = scanner.nextLine().split(" ");
+        }
+    }
+
+
+    private static void printEven(List<Integer> numbers) {
+        List<Integer> evens = new ArrayList<>();
+
+        for (int i = 0; i < numbers.size(); i++) {
+            int curr = numbers.get(i);
+
+            if (curr % 2 == 0) {
+                evens.add(curr);
+            }
+        }
+
+        for (Integer even : evens) {
+            System.out.print(even + " ");
+        }
+        System.out.println();
+    }
+
+
+    private static void printOdd(List<Integer> numbers) {
+        List<Integer> evens = new ArrayList<>();
+
+        for (int i = 0; i < numbers.size(); i++) {
+            int curr = numbers.get(i);
+
+            if (curr % 2 != 0) {
+                evens.add(curr);
+            }
+        }
+
+        for (Integer even : evens) {
+            System.out.print(even + " ");
+        }
+        System.out.println();
+    }
+
+
+    private static void containNumber(List<Integer> numbers, int number) {
+        boolean contains = numbers.contains(number);
+
+        if (contains) {
+            System.out.println("Yes");
+        } else {
+            System.out.println("No such number");
+        }
+    }
+}
