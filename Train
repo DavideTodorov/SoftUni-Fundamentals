@@ -1,0 +1,45 @@
+package com.company;
+
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class Test {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Integer> wagons = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+
+        int maxCapacityOfWagon = Integer.parseInt(scanner.nextLine());
+
+        String[] input = scanner.nextLine().split(" ");
+        while (!"end".equals(input[0])) {
+
+            if (input.length > 1 && input[0].equals("Add")) {
+                int capacityOfCurrentWagon = Integer.parseInt(input[1]);
+                wagons.add(capacityOfCurrentWagon);
+            } else {
+                int numOfPassengers = Integer.parseInt(input[0]);
+
+                for (int i = 0; i < wagons.size(); i++) {
+                    int sumOfPassengers = wagons.get(i) + numOfPassengers;
+
+                    if (sumOfPassengers <= maxCapacityOfWagon) {
+                        wagons.set(i, sumOfPassengers);
+                        break;
+                    }
+                }
+            }
+
+            input = scanner.nextLine().split(" ");
+        }
+
+        for (Integer wagon : wagons) {
+            System.out.print(wagon + " ");
+        }
+    }
+}
