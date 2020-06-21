@@ -1,0 +1,55 @@
+package com.company;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Integer> firstHand = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .map(Integer::parseInt).collect(Collectors.toList());
+
+        List<Integer> secondHand = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .map(Integer::parseInt).collect(Collectors.toList());
+
+
+        while (firstHand.size() > 0 && secondHand.size() > 0) {
+
+            int firstHandCard = firstHand.get(0);
+            int secondHandCard = secondHand.get(0);
+
+            if (firstHandCard > secondHandCard) {
+                firstHand.add(firstHandCard);
+                firstHand.add(secondHandCard);
+                firstHand.remove(0);
+                secondHand.remove(0);
+            } else if (secondHandCard > firstHandCard) {
+                secondHand.add(secondHandCard);
+                secondHand.add(firstHandCard);
+                firstHand.remove(0);
+                secondHand.remove(0);
+            } else {
+                firstHand.remove(0);
+                secondHand.remove(0);
+            }
+        }
+
+        int firstSum = 0;
+        for (Integer integer : firstHand) {
+            firstSum += integer;
+        }
+
+        int secondSum = 0;
+        for (Integer integer : secondHand) {
+            secondSum += integer;
+        }
+
+        if (firstSum > secondSum){
+            System.out.printf("First player wins! Sum: %d", firstSum);
+        }else {
+            System.out.printf("Second player wins! Sum: %d", secondSum);
+        }
+    }
+}
