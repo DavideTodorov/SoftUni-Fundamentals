@@ -1,0 +1,116 @@
+package com.company;
+
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<String> schedule = Arrays.stream(scanner.nextLine().split(", ")).collect(Collectors.toList());
+
+        String input = scanner.nextLine();
+        while (!"course start".equals(input)) {
+            String[] tokens = input.split("\\:");
+
+            String lessonTitle = tokens[1];
+            switch (tokens[0]) {
+
+                case "Add":
+                    if (!schedule.contains(lessonTitle)) {
+                        schedule.add(lessonTitle);
+                    }
+                    break;
+
+                case "Insert":
+                    int index = Integer.parseInt(tokens[2]);
+                    if (!schedule.contains(lessonTitle)) {
+                        schedule.add(index, lessonTitle);
+                    }
+                    break;
+
+                case "Remove":
+                    int indexOfLesson = schedule.indexOf(lessonTitle);
+                    String exersice = schedule.get(indexOfLesson + 1);
+                    String toEqual = lessonTitle + "-Exercise";
+                    if (exersice.equals(toEqual)) {
+                        schedule.remove(indexOfLesson + 1);
+                    }
+
+                    if (schedule.contains(lessonTitle)) {
+                        schedule.remove(lessonTitle);
+                    }
+
+                    break;
+
+                case "Swap":
+                    String secondLessonTitle = tokens[2];
+
+                    int firstExerciseIndex = schedule.indexOf(lessonTitle) + 1;
+                    int secondExerciseIndex = schedule.indexOf(secondLessonTitle) + 1;
+
+                    String firstExercise = "";
+                    String secondExercise = "";
+                    if (firstExerciseIndex >= 0 && firstExerciseIndex < schedule.size() &&
+                            secondExerciseIndex >= 0 && secondExerciseIndex < schedule.size()) {
+
+                        firstExercise = schedule.get(firstExerciseIndex);
+                        secondExercise = schedule.get(secondExerciseIndex);
+                        String firstToEqual = schedule.get(firstExerciseIndex) + "-Exercise";
+                        String secondToEqual = schedule.get(secondExerciseIndex) + "-Exercise";
+
+                        if (firstToEqual.equals(firstExercise) && secondToEqual.equals(secondExercise)) {
+
+                            schedule.set(firstExerciseIndex, secondExercise);
+                            schedule.set(secondExerciseIndex, firstExercise);
+
+                        }
+                    }
+
+                    if (schedule.contains(secondLessonTitle) && schedule.contains(lessonTitle)) {
+                        int indexOfFirstLesson = schedule.indexOf(lessonTitle);
+                        int indexOfSecondLesson = schedule.indexOf(secondLessonTitle);
+                        String curr = schedule.get(indexOfFirstLesson);
+                        schedule.set(indexOfFirstLesson, schedule.get(indexOfSecondLesson));
+                        schedule.set(indexOfSecondLesson, curr);
+
+
+                        if (schedule.contains(lessonTitle + "-Exercise")) {
+                            int indexOfExercise = schedule.indexOf(lessonTitle + "-Exercise");
+                            indexOfFirstLesson = schedule.indexOf(lessonTitle);
+                            schedule.remove(indexOfExercise);
+                            schedule.set(indexOfFirstLesson + 1, lessonTitle + "-Exercise");
+                        }
+
+                        if (schedule.contains(secondLessonTitle + "-Exercise")) {
+                            int indexOfExercise = schedule.indexOf(secondLessonTitle + "-Exercise");
+                            indexOfSecondLesson = schedule.indexOf(secondLessonTitle);
+                            schedule.remove(indexOfExercise);
+                            schedule.add(indexOfSecondLesson + 1, secondLessonTitle + "-Exercise");
+                        }
+                    }
+                    break;
+
+                case "Exercise":
+                    if (schedule.contains(lessonTitle)) {
+                        int lessonTitleIndex = schedule.indexOf(lessonTitle);
+                        if (!schedule.get(lessonTitleIndex + 1).equals(lessonTitle + "-Exercise")) {
+                            schedule.add(lessonTitleIndex + 1, lessonTitle + "-Exercise");
+                        }
+                    } else {
+                        schedule.add(lessonTitle);
+                        schedule.add(lessonTitle + "-Exercise");
+                    }
+            }
+
+            input = scanner.nextLine();
+        }
+
+        for (int i = 0; i < schedule.size(); i++) {
+            System.out.printf("%d.%s%n", i + 1, schedule.get(i));
+        }
+
+    }
+}
