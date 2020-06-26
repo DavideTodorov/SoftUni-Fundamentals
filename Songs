@@ -1,0 +1,61 @@
+package com.company;
+
+import java.util.*;
+
+public class Main {
+
+    static class Songs {
+        String typeList;
+        String songName;
+        String time;
+
+        Songs(String typeList, String songName, String time) {
+            this.typeList = typeList;
+            this.songName = songName;
+            this.time = time;
+        }
+
+        public String getTypeList() {
+            return typeList;
+        }
+
+        public String getSongName() {
+            return songName;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = Integer.parseInt(scanner.nextLine());
+
+        List<Songs> songsList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+
+            String[] input = scanner.nextLine().split("\\_");
+            Songs newSong = new Songs(input[0], input[1], input[2]);
+            songsList.add(newSong);
+
+
+        }
+
+        String input = scanner.nextLine();
+
+        if (input.equals("all")) {
+            for (Songs songs : songsList) {
+                System.out.println(songs.getSongName());
+            }
+        } else {
+            for (Songs songs : songsList) {
+                if (songs.getTypeList().equals(input)) {
+                    System.out.println(songs.getSongName());
+                }
+            }
+        }
+    }
+}
