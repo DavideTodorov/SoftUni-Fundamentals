@@ -1,0 +1,85 @@
+package com.company;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+
+public class Test {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<Integer> targets = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+
+        String input = scanner.nextLine();
+        while (!"End".equals(input)) {
+            String[] tokens = input.split("\\s+");
+
+            switch (tokens[0]) {
+                case "Shoot":
+                    int index = Integer.parseInt(tokens[1]);
+                    int power = Integer.parseInt(tokens[2]);
+                    if (index >= 0 && index < targets.size()) {
+                        shotTarget(index, power, targets);
+                    }
+                    break;
+
+                case "Add":
+                    index = Integer.parseInt(tokens[1]);
+                    int value = Integer.parseInt(tokens[2]);
+
+                    if (index >= 0 && index < targets.size()) {
+                        targets.add(index, value);
+                    }else {
+                        System.out.println("Invalid placement!");
+                    }
+                    break;
+
+                case "Strike":
+                    index = Integer.parseInt(tokens[1]);
+                    int radius = Integer.parseInt(tokens[2]);
+                    strikeTarget(index, radius, targets);
+                    break;
+            }
+            input = scanner.nextLine();
+        }
+
+        for (int i = 0; i < targets.size(); i++) {
+            if (i == targets.size() - 1){
+                System.out.print(targets.get(i));
+            }else {
+                System.out.print(targets.get(i) + "|");
+            }
+        }
+    }
+
+
+    private static void shotTarget(int index, int power, List<Integer> targets) {
+        int numberToBeShot = targets.get(index);
+        numberToBeShot -= power;
+
+        if (numberToBeShot <= 0){
+            targets.remove(index);
+        }else {
+            targets.set(index, numberToBeShot);
+        }
+    }
+
+
+    private static void strikeTarget(int index, int radius, List<Integer> targets) {
+
+        if (index - radius >= 0 && index + radius < targets.size()) {
+            int startingIndex = index - radius;
+            int finalIndex = index + radius;
+
+            for (int i = finalIndex; i >= startingIndex; i--) {
+                targets.remove(i);
+            }
+        }else{
+            System.out.println("Strike missed!");
+        }
+    }
+}
