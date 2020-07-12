@@ -1,0 +1,39 @@
+package com.company;
+
+import com.sun.security.jgss.GSSUtil;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.time.chrono.MinguoDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int count = Integer.parseInt(scanner.nextLine());
+
+        Map<String, List<String>> synonyms = new LinkedHashMap<>();
+
+        for (int i = 0; i < count; i++) {
+            String word = scanner.nextLine();
+            String synonym = scanner.nextLine();
+
+            List<String> currSynonyms = synonyms.get(word);
+            if (currSynonyms == null) {
+                currSynonyms = new ArrayList<>();
+                synonyms.put(word, currSynonyms);
+            }
+
+            currSynonyms.add(synonym);
+        }
+
+
+        for (Map.Entry<String, List<String>> stringListEntry : synonyms.entrySet()) {
+            System.out.printf("%s - %s%n", stringListEntry.getKey(), String.join(", ", stringListEntry.getValue()));
+        }
+
+    }
+}
