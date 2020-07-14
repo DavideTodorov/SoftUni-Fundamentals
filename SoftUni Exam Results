@@ -1,0 +1,104 @@
+package com.company;
+
+import org.w3c.dom.ls.LSOutput;
+
+import java.util.*;
+
+public class Main {
+
+    public static class Student {
+        String name;
+        String language;
+        int points;
+
+        public Student(String name, String language, int points) {
+            this.name = name;
+            this.language = language;
+            this.points = points;
+        }
+
+        public int getPoints() {
+            return points;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getLanguage() {
+            return language;
+        }
+
+        @Override
+        public String toString() {
+            return "Student{" +
+                    "name='" + name + '\'' +
+                    ", language='" + language + '\'' +
+                    ", points=" + points +
+                    '}';
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Student> students = new LinkedHashMap<>();
+        Map<String, Integer> submissionsCount = new LinkedHashMap<>();
+
+        String input = scanner.nextLine();
+        while (!"exam finished".equals(input)) {
+            String[] tokens = input.split("-");
+            String name = tokens[0];
+            String language = tokens[1];
+
+
+            if (language.equals("banned")) {
+                students.remove(name);
+            } else {
+                int newPoints = Integer.parseInt(tokens[2]);
+
+                if (students.containsKey(name)) {
+                    int oldPoints = students.get(name).getPoints();
+                    if (oldPoints < newPoints) {
+                        Student student = new Student(name, language, newPoints);
+                        students.put(name, student);
+                    }
+                } else {
+                    Student student = new Student(name, language, newPoints);
+                    students.put(name, student);
+                }
+
+                submissionsCount.putIfAbsent(language, 0);
+                int currSubmissions = submissionsCount.get(language) + 1;
+                submissionsCount.put(language, currSubmissions);
+            }
+
+
+            input = scanner.nextLine();
+        }
+
+        System.out.println("Results: ");
+        students.entrySet()
+                .stream()
+                .sorted((s1, s2) -> {
+                    int result = Integer.compare(s2.getValue().getPoints(), s1.getValue().getPoints());
+                    if (result == 0) {
+                        result = s1.getKey().compareTo(s2.getKey());
+                    }
+                    return result;
+                })
+                .forEach(s -> System.out.println(String.format("%s | %d", s.getValue().getName(), s.getValue().getPoints())));
+
+        System.out.println("Submissions: ");
+        submissionsCount.entrySet()
+                .stream()
+                .sorted((s1, s2) -> {
+                    int result = Integer.compare(s2.getValue(), s1.getValue());
+                    if (result == 0) {
+                        result = s1.getKey().compareTo(s2.getKey());
+                    }
+                    return result;
+                })
+                .forEach(s -> System.out.println(String.format("%s - %d", s.getKey(), s.getValue())));
+    }
+}
