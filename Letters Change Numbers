@@ -1,0 +1,42 @@
+package com.company;
+
+import java.util.*;
+
+public class Main {
+
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] input = scanner.nextLine().split("\\s+");
+
+        double result = 0;
+        for (int i = 0; i < input.length; i++) {
+            String curr = input[i];
+
+            char firstLetter = curr.charAt(0);
+            char lastLetter = curr.charAt(curr.length() - 1);
+            double number = Double.parseDouble(curr.substring(1, curr.length() - 1));
+
+            if (firstLetter >= 97 && firstLetter <= 122){
+                int firstLetterPosition = firstLetter - 96;
+                number = number * firstLetterPosition;
+            }else {
+                int firstLetterPosition = firstLetter - 64;
+                number = number / firstLetterPosition;
+            }
+
+            if (lastLetter >= 97 && lastLetter <= 122){
+                int lastLetterPosition = lastLetter - 96;
+                number = number + lastLetterPosition;
+            }else {
+                int lastLetterPosition = lastLetter - 64;
+                number = number - lastLetterPosition;
+            }
+
+            result += number;
+        }
+
+        System.out.println(String.format("%.2f", result));
+    }
+}
