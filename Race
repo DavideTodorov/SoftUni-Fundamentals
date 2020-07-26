@@ -1,0 +1,66 @@
+package com.company;
+
+import org.w3c.dom.ls.LSOutput;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+
+public class Test {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, Integer> participants = new LinkedHashMap<>();
+        String[] inputNames = scanner.nextLine().split(", ");
+        for (String inputName : inputNames) {
+            participants.putIfAbsent(inputName, 0);
+        }
+
+        Pattern pattern = Pattern.compile("[\\w+_]+");
+
+        String input = scanner.nextLine();
+        while (!"end of race".equals(input)) {
+            Matcher matcher = pattern.matcher(input);
+            StringBuilder filtered = new StringBuilder();
+
+            StringBuilder name = new StringBuilder();
+            int length = 0;
+
+            while (matcher.find()) {
+                filtered.append(matcher.group());
+            }
+            String curr = filtered.toString();
+
+            for (int i = 0; i < curr.length(); i++) {
+                char currChar = curr.charAt(i);
+
+                if (Character.isLetter(currChar)) {
+                    name.append(currChar);
+                } else if (Character.isDigit(currChar)) {
+                    length += Character.getNumericValue(currChar);
+                }
+            }
+            String stringName = name.toString();
+
+            if (participants.containsKey(stringName)) {
+                int oldLength = participants.get(stringName);
+                oldLength += length;
+                participants.put(stringName, oldLength);
+            }
+
+            input = scanner.nextLine();
+        }
+
+        List<String> output = new ArrayList<>();
+        output.add("1st place: ");
+        output.add("2nd place: ");
+        output.add("3rd place: ");
+
+        participants.entrySet()
+                .stream()
+                .sorted((x1, x2) -> Integer.compare(x2.getValue(), x1.getValue()))
+                .limit(3).forEach(x -> System.out.println(output.remove(0) + x.getKey()));
+    }
+}
