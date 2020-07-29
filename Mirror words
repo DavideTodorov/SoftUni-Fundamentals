@@ -1,0 +1,47 @@
+package com.company;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Test {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+        Pattern pattern = Pattern.compile("([#|@])(?<first>[a-zA-z]{3,})(\\1)(\\1)(?<second>[a-zA-z]{3,})(\\1)");
+        Matcher matcher = pattern.matcher(input);
+
+        int validPairsCount = 0;
+        List<String> mirrorWords = new ArrayList<>();
+        boolean foundPairs = false;
+        
+        while (matcher.find()) {
+            foundPairs = true;
+            validPairsCount++;
+            String first = matcher.group("first");
+            String second = matcher.group("second");
+            StringBuilder secondWord = new StringBuilder();
+            secondWord.append(second);
+            secondWord = secondWord.reverse();
+
+            if (first.equals(secondWord.toString())) {
+                String toAdd = first + " <=> " + second;
+                mirrorWords.add(toAdd);
+            }
+        }
+
+        if (!foundPairs){
+            System.out.println("No word pairs found!\n" +
+                    "No mirror words!");
+        }else if (mirrorWords.isEmpty()) {
+            System.out.println(String.format("%d word pairs found!", validPairsCount));
+            System.out.println("No mirror words!");
+        } else {
+            System.out.println(String.format("%d word pairs found!", validPairsCount));
+            System.out.println("The mirror words are:");
+            System.out.println(String.join(", ", mirrorWords));
+        }
+    }
+}
