@@ -1,0 +1,116 @@
+package com.company;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Main {
+
+    static class City {
+        int population;
+        int gold;
+
+        public City(int population, int gold) {
+            this.population = population;
+            this.gold = gold;
+        }
+
+        public int getPopulation() {
+            return population;
+        }
+
+        public int getGold() {
+            return gold;
+        }
+
+        public void setPopulation(int population) {
+            this.population = population;
+        }
+
+        public void setGold(int gold) {
+            this.gold = gold;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, City> cities = new TreeMap<>();
+
+        String cityInput = scanner.nextLine();
+        while (!"Sail".equals(cityInput)) {
+            String[] tokens = cityInput.split("\\|+");
+            String cityName = tokens[0];
+            int population = Integer.parseInt(tokens[1]);
+            int gold = Integer.parseInt(tokens[2]);
+
+            if (!cities.containsKey(cityName)) {
+                City city = new City(population, gold);
+                cities.putIfAbsent(cityName, city);
+            } else {
+                gold = cities.get(cityName).getGold() + gold;
+                population = cities.get(cityName).getPopulation() + population;
+                cities.get(cityName).setGold(gold);
+                cities.get(cityName).setPopulation(population);
+            }
+            cityInput = scanner.nextLine();
+        }
+
+        String input = scanner.nextLine();
+        while (!"End".equals(input)) {
+            String[] tokens = input.split("=>");
+            String command = tokens[0];
+            String cityName = tokens[1];
+
+            switch (command) {
+                case "Plunder":
+                    int people = Integer.parseInt(tokens[2]);
+                    int gold = Integer.parseInt(tokens[3]);
+
+                    int currCityGold = cities.get(cityName).getGold();
+                    int currCityPopulation = cities.get(cityName).getPopulation();
+
+                    currCityGold -= gold;
+                    currCityPopulation -= people;
+
+                    cities.get(cityName).setGold(currCityGold);
+                    cities.get(cityName).setPopulation(currCityPopulation);
+
+                    System.out.println(String.format("%s plundered! %d gold stolen, %d citizens killed.",
+                            cityName, gold, people));
+
+                    if (currCityGold <= 0 || currCityPopulation <= 0) {
+                        System.out.println(String.format("%s has been wiped off the map!", cityName));
+                        cities.remove(cityName);
+                        if (cities.isEmpty()) {
+                            System.out.println("Ahoy, Captain! All targets have been plundered and destroyed!");
+                            return;
+                        }
+                    }
+                    break;
+
+                case "Prosper":
+                    gold = Integer.parseInt(tokens[2]);
+                    if (gold < 0) {
+                        System.out.println("Gold added cannot be a negative number!");
+                    } else {
+                        currCityGold = cities.get(cityName).getGold() + gold;
+                        cities.get(cityName).setGold(currCityGold);
+                        System.out.println(String.format("%d gold added to the city treasury. %s now has %d gold.",
+                                gold, cityName, currCityGold));
+                    }
+                    break;
+            }
+
+            input = scanner.nextLine();
+        }
+
+//        Havana -> Population: 410000 citizens, Gold: 1100 kg
+        System.out.println(String.format("Ahoy, Captain! There are %d wealthy settlements to go to:", cities.size()));
+        cities.entrySet()
+                .stream()
+                .sorted((c1, c2) -> Integer.compare(c2.getValue().getGold(), c1.getValue().getGold()))
+                .forEach(c -> System.out.println(String.format("%s -> Population: %d citizens, Gold: %d kg",
+                        c.getKey(), c.getValue().getPopulation(), c.getValue().getGold())));
+    }
+}
