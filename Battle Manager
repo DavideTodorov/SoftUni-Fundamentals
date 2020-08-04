@@ -1,0 +1,108 @@
+package com.company;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Main {
+
+    static class Person {
+        int health;
+        int energy;
+
+        public Person(int health, int energy) {
+            this.health = health;
+            this.energy = energy;
+        }
+
+        public int getHealth() {
+            return health;
+        }
+
+        public void setHealth(int health) {
+            this.health = health;
+        }
+
+        public void setEnergy(int energy) {
+            this.energy = energy;
+        }
+
+        public int getEnergy() {
+            return energy;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Person> people = new HashMap<>();
+
+        String input = scanner.nextLine();
+        while (!"Results".equals(input)) {
+            String[] tokens = input.split(":");
+            String command = tokens[0];
+
+            switch (command) {
+                case "Add":
+                    String name = tokens[1];
+                    int health = Integer.parseInt(tokens[2]);
+                    int energy = Integer.parseInt(tokens[3]);
+                    if (people.containsKey(name)) {
+                        int currHealth = people.get(name).getHealth() + health;
+                        people.get(name).setHealth(currHealth);
+                    } else {
+                        people.put(name, new Person(health, energy));
+                    }
+                    break;
+
+                case "Attack":
+                    String attackerName = tokens[1];
+                    String defenderName = tokens[2];
+                    int damage = Integer.parseInt(tokens[3]);
+
+                    if (people.containsKey(attackerName) && people.containsKey(defenderName)) {
+                        int defenderHealth = people.get(defenderName).getHealth() - damage;
+                        if (defenderHealth <= 0) {
+                            people.remove(defenderName);
+                            System.out.println(String.format("%s was disqualified!", defenderName));
+                        } else {
+                            people.get(defenderName).setHealth(defenderHealth);
+                        }
+
+                        int attackerEnergy = people.get(attackerName).getEnergy() - 1;
+                        if (attackerEnergy <= 0) {
+                            people.remove(attackerName);
+                            System.out.println(String.format("%s was disqualified!", attackerName));
+                        } else {
+                            people.get(attackerName).setEnergy(attackerEnergy);
+                        }
+                    }
+                    break;
+
+                case "Delete":
+                    name = tokens[1];
+                    if (name.equals("All")) {
+                        people.clear();
+                    } else {
+                        people.remove(name);
+                    }
+                    break;
+            }
+            input = scanner.nextLine();
+        }
+
+        System.out.println(String.format("People count: %d", people.size()));
+        people.entrySet()
+                .stream()
+                .sorted((a, b) -> {
+                    int result = Integer.compare(b.getValue().getHealth(), a.getValue().getHealth());
+
+                    if (result == 0) {
+                        result = a.getKey().compareTo(b.getKey());
+                    }
+                    return result;
+                })
+                .forEach(p -> System.out.println(String.format("%s - %d - %d",
+                        p.getKey(), p.getValue().getHealth(), p.getValue().getEnergy())));
+    }
+}
