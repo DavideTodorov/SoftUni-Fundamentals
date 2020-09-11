@@ -1,0 +1,61 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        List<String> elements = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .collect(Collectors.toList());
+
+        int moves = 0;
+
+        String input = scanner.nextLine();
+        while (!"end".equals(input)) {
+            String[] tokens = input.split("\\s+");
+            int firstIndex = Integer.parseInt(tokens[0]);
+            int secondIndex = Integer.parseInt(tokens[1]);
+
+            if (firstIndex == secondIndex ||
+                    firstIndex < 0 || firstIndex >= elements.size() ||
+                    secondIndex < 0 || secondIndex >= elements.size()) {
+                moves++;
+                System.out.println("Invalid input! Adding additional elements to the board");
+                String toInsert = String.format("-%da", moves);
+                int midIndex = elements.size() / 2;
+                elements.add(midIndex, toInsert);
+                elements.add(midIndex, toInsert);
+                input = scanner.nextLine();
+                continue;
+            }
+
+            String firstElement = elements.get(firstIndex);
+            String secondElement = elements.get(secondIndex);
+
+            if (firstElement.equals(secondElement)) {
+                System.out.printf("Congrats! You have found matching elements - %s!%n", firstElement);
+                while (elements.contains(firstElement)) {
+                    elements.remove(firstElement);
+                }
+                moves++;
+            } else {
+                System.out.println("Try again!");
+                moves++;
+            }
+
+            if (elements.size() == 0) {
+                System.out.printf("You have won in %d turns!%n", moves);
+                break;
+            }
+            input = scanner.nextLine();
+        }
+
+        if (!elements.isEmpty()) {
+            System.out.println("Sorry you lose :(");
+            System.out.println(String.join(" ", elements));
+        }
+    }
+}
