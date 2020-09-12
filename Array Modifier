@@ -1,0 +1,61 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] numbers = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt).toArray();
+
+        String input = scanner.nextLine();
+        while (!"end".equals(input)) {
+            String[] tokens = input.split("\\s+");
+            String command = tokens[0];
+
+            switch (command) {
+                case "swap":
+                    int indexOne = Integer.parseInt(tokens[1]);
+                    int indexTwo = Integer.parseInt(tokens[2]);
+                    int temp = numbers[indexOne];
+                    numbers[indexOne] = numbers[indexTwo];
+                    numbers[indexTwo] = temp;
+                    break;
+
+                case "multiply":
+                    indexOne = Integer.parseInt(tokens[1]);
+                    indexTwo = Integer.parseInt(tokens[2]);
+                    int result = numbers[indexOne] * numbers[indexTwo];
+                    numbers[indexOne] = result;
+                    int[] newArray = new int[numbers.length - 1];
+
+                    int secondArrayIndex = 0;
+                    for (int i = 0; i < numbers.length; i++) {
+                        if (indexTwo != i){
+                            newArray[secondArrayIndex] = numbers[i];
+                            secondArrayIndex++;
+                        }
+                    }
+                    break;
+
+                case "decrease":
+                    for (int i = 0; i < numbers.length; i++) {
+                        numbers[i] -= 1;
+                    }
+                    break;
+            }
+
+            input = scanner.nextLine();
+        }
+
+        for (int i = 0; i < numbers.length; i++) {
+            int curr = numbers[i];
+            if (i == numbers.length - 1){
+                System.out.println(curr);
+            }else {
+                System.out.print(curr + ", ");
+            }
+        }
+    }
+}
