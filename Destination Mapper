@@ -1,0 +1,28 @@
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Pattern pattern = Pattern.compile("(=|\\/)(?<name>[A-Z][A-Za-z]{2,})\\1");
+
+        String input = scanner.nextLine();
+
+        List<String> destinations = new ArrayList<>();
+
+        Matcher matcher = pattern.matcher(input);
+        int points = 0;
+        while (matcher.find()) {
+            String currWord = matcher.group("name");
+            destinations.add(currWord);
+            points += currWord.length();
+        }
+        System.out.println(String.format("Destinations: %s", String.join(", ", destinations)));
+        System.out.println(String.format("Travel Points: %d", points));
+    }
+}
