@@ -1,0 +1,90 @@
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = Integer.parseInt(scanner.nextLine());
+
+        Map<String, List<Double>> plants = new LinkedHashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            String[] input = scanner.nextLine().split("<->");
+            String plantName = input[0];
+            double plantRarity = Double.parseDouble(input[1]);
+
+            if (plants.containsKey(plantName)) {
+                plants.get(plantName).set(0, plantRarity);
+                plants.get(plantName).set(1, 0.0);
+            } else {
+                plants.put(plantName, new ArrayList<>());
+                plants.get(plantName).add(0, plantRarity);
+                plants.get(plantName).add(1, 0.0);
+            }
+        }
+
+
+        String input = scanner.nextLine();
+        while (!"Exhibition".equals(input)) {
+            String[] tokens = input.split(":\\s+");
+            String command = tokens[0];
+            String[] details = tokens[1].split("\\s+-\\s+");
+            String plantName = details[0];
+
+            if (plants.containsKey(plantName)) {
+                switch (command) {
+                    case "Rate":
+                        double inputRating = Double.parseDouble(details[1]);
+                        double oldRating = plants.get(plantName).remove(1);
+
+                        if (oldRating != 0) {
+                            double newRating = (inputRating + oldRating) / 2;
+                            plants.get(plantName).add(1, newRating);
+                        } else {
+                            plants.get(plantName).add(1, inputRating);
+                        }
+                        break;
+
+                    case "Update":
+                        double newRarity = Double.parseDouble(details[1]);
+                        plants.get(plantName).set(0, newRarity);
+                        break;
+
+                    case "Reset":
+                        plants.get(plantName).set(1, 0.0);
+                        break;
+
+                    default:
+                        System.out.println("error");
+                        break;
+                }
+            } else {
+                System.out.println("error");
+            }
+
+            input = scanner.nextLine();
+        }
+
+        System.out.println("Plants for the exhibition:");
+
+        plants.entrySet()
+                .stream()
+                .sorted((x1, x2) -> {
+                    int result = 0;
+                    result = Double.compare(x2.getValue().get(0), x1.getValue().get(0));
+
+                    if (result == 0) {
+                        result = Double.compare(x2.getValue().get(1), x1.getValue().get(1));
+                    }
+
+                    return result;
+                })
+                .forEach(x -> System.out.println(String.format("- %s; Rarity: %.0f; Rating: %.2f",
+                        x.getKey(), x.getValue().get(0), x.getValue().get(1))));
+    }
+}
