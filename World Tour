@@ -1,0 +1,49 @@
+package com.company;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String text = scanner.nextLine();
+
+        String input = scanner.nextLine();
+        while (!"Travel".equalsIgnoreCase(input)) {
+            String[] tokens = input.split(":");
+            String command = tokens[0];
+
+            if (command.contains("Add")) {
+                int index = Integer.parseInt(tokens[1]);
+                String toInsert = tokens[2];
+                StringBuilder sb = new StringBuilder(text);
+                if (index >= 0 && index <= text.length()) {
+                    sb.insert(index, toInsert);
+                }
+                text = sb.toString();
+                System.out.println(text);
+
+            } else if (command.contains("Remove")) {
+                StringBuilder sb = new StringBuilder(text);
+                int startIndex = Integer.parseInt(tokens[1]);
+                int endIndex = Integer.parseInt(tokens[2]);
+                if (startIndex >= 0 && endIndex < text.length()) {
+                    sb.delete(startIndex, endIndex + 1);
+                }
+                text = sb.toString();
+                System.out.println(text);
+
+            } else if (command.contains("Switch")) {
+                String oldString = tokens[1];
+                String newString = tokens[2];
+               
+                text = text.replaceAll(oldString, newString);
+
+                System.out.println(text);
+            }
+            input = scanner.nextLine();
+        }
+        System.out.println(String.format("Ready for world tour! Planned stops: %s", text));
+    }
+}
